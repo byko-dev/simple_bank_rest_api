@@ -45,11 +45,11 @@ class UserService extends AbstractService {
         /* validate jwt token */
         try {
             $validationResponse = $this->authorizeAndGetPayload();
+
+            /* returns user balance */
+            return $this->userTable->getById($validationResponse["id"]);
         } catch (\Exception $e) {
             return $this->sendUnauthorizedResponse();
         }
-
-        /* returns user balance */
-        return $this->userTable->getById($validationResponse["id"]);
     }
 }
