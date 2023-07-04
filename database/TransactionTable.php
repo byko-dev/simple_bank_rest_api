@@ -1,8 +1,11 @@
 <?php
 
-require_once 'Autoloader.php';
+namespace Database;
 
-spl_autoload_register(Autoloader::loadClass("DatabaseConnector"));
+require 'vendor/autoload.php';
+
+use Database\DatabaseConnector;
+use PDO;
 
 class TransactionTable {
 

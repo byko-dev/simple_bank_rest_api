@@ -1,8 +1,10 @@
 <?php
 
-require_once 'Autoloader.php';
+namespace jwt;
 
-spl_autoload_register(Autoloader::loadClass("env/Env"));
+require 'vendor/autoload.php';
+
+use env\Env;
 
 /* simple JWT token (unsafe, without signature check) */
 class JWT {
@@ -49,7 +51,7 @@ class JWT {
         return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
     }
 
-    private function base64UrlDecode(string $data) : string|false{
+    private function base64UrlDecode($data) : string|false{
         return base64_decode(strtr($data, '-_', '+/'));
     }
 }

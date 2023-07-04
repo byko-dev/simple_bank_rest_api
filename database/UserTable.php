@@ -1,7 +1,11 @@
 <?php
-require_once 'Autoloader.php';
 
-spl_autoload_register(Autoloader::loadClass("DatabaseConnector"));
+namespace Database;
+
+require 'vendor/autoload.php';
+
+use Database\DatabaseConnector;
+use PDO;
 
 class UserTable {
 

@@ -1,0 +1,20 @@
+{
+    "name": "bykop/simple_bank_rest_api",
+    "authors": [
+        {
+            "name": "bykop",
+            "email": "byko.dev@gmail.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Controller\\": "controllers/",
+            "Services\\": "services/",
+            "Database\\": "database/",
+            "env\\": "env/",
+            "jwt\\": "jwt/"
+        }
+    }
+
+}

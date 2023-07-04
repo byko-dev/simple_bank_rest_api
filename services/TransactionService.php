@@ -1,50 +1,42 @@
 <?php
 
-require_once 'Autoloader.php';
+namespace Services;
 
-spl_autoload_register(Autoloader::loadClass("database/TransactionTable"));
-spl_autoload_register(Autoloader::loadClass("jwt/JWT"));
+require 'vendor/autoload.php';
 
+use Database\TransactionTable;
+use Database\UserTable;
 
-/* maybe a better way is to use trait instead of abstract class, i dont know */
 class TransactionService extends AbstractService {
 
     private TransactionTable $transactionTable;
     private UserTable $userTable;
-    private JWT $jwt;
 
     public function __construct(){
+        parent::__construct();
         $this->transactionTable = new TransactionTable();
         $this->userTable = new UserTable();
-        $this->jwt = new JWT();
     }
 
-    public function getUserTransactions(array $headers) : string {
+    public function getUserTransactions() : array {
         /* validate jwt token */
-        $token = $headers["Authorization"];
-        if(!isset($token))
+        try {
+            $validationResponse = $this->authorizeAndGetPayload();
+        } catch (\Exception $e) {
             return $this->sendUnauthorizedResponse();
-
-        $validationResponse = $this->jwt->validateToken($token);
-
-        if($validationResponse === NULL)
-            return $this->sendUnauthorizedResponse();
+        }
 
         /* get user all transactions */
-        return json_encode($this->transactionTable->getByUserId($validationResponse["id"]));
+        return $this->transactionTable->getByUserId($validationResponse["id"]);
     }
 
-    public function newTransaction(false|array $headers, array $data) : string{
-
+    public function newTransaction(array $data) : array{
         /* validate jwt token */
-        $token = $headers["Authorization"];
-        if(!isset($token))
+        try {
+            $validationResponse = $this->authorizeAndGetPayload();
+        } catch (\Exception $e) {
             return $this->sendUnauthorizedResponse();
-
-        $validationResponse = $this->jwt->validateToken($token);
-
-        if($validationResponse === NULL)
-            return $this->sendUnauthorizedResponse();
+        }
 
         /* simple validate requested data */
         if(empty($data["amount"] || empty($data["type"])))
@@ -59,7 +51,7 @@ class TransactionService extends AbstractService {
         $this->userTable->updateBalance($currently_balance, $data["user_id"]);
 
         /* return updated user balance record */
-        return json_encode($this->userTable->getById($data["user_id"]));
+        return $this->userTable->getById($data["user_id"]);
     }
 
     private function updateBalance(string $user_id, float $amount) : int{

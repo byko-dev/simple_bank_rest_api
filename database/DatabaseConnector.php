@@ -1,8 +1,11 @@
 <?php
 
-require_once 'Autoloader.php';
+namespace Database;
 
-spl_autoload_register(Autoloader::loadClass("env/Env"));
+require 'vendor/autoload.php';
+
+use env\Env;
+use PDO;
 
 class DatabaseConnector
 {

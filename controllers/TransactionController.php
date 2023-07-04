@@ -1,10 +1,11 @@
 <?php
+namespace Controller;
 
-require_once 'Autoloader.php';
+require 'vendor/autoload.php';
 
-spl_autoload_register(Autoloader::loadClass("services/TransactionService"));
+use Services\TransactionService;
 
-class TransactionController {
+class TransactionController extends AbstractController {
 
     private TransactionService $transactionService;
 
@@ -12,13 +13,11 @@ class TransactionController {
         $this->transactionService = new TransactionService();
     }
 
-    public function createTransaction() : string {
-        $data = json_decode(file_get_contents('php://input'), true);
-
-        return $this->transactionService->newTransaction(getallheaders(), $data);
+    public function createTransaction() : array {
+        return $this->transactionService->newTransaction($this->getBody());
     }
 
-    public function getTransactions() : string {
-        return $this->transactionService->getUserTransactions(getallheaders());
+    public function getTransactions() : array {
+        return $this->transactionService->getUserTransactions();
     }
 }

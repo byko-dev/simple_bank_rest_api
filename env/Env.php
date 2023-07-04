@@ -1,5 +1,7 @@
 <?php
 
+namespace env;
+
 class Env
 {
     private const ENV_PATH = "/.env";

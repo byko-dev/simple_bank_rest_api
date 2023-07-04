@@ -1,10 +1,12 @@
 <?php
 
-require_once 'Autoloader.php';
+namespace Controller;
 
-spl_autoload_register(Autoloader::loadClass("services/UserService"));
+require 'vendor/autoload.php';
 
-class UserController {
+use Services\UserService;
+
+class UserController extends AbstractController {
 
     private UserService $userService;
 
@@ -12,20 +14,15 @@ class UserController {
         $this->userService = new UserService();
     }
 
-    public function createAccount() : string {
-        $data = json_decode(file_get_contents('php://input'), true);
-
-        return $this->userService->register($data);
+    public function createAccount() : string|array {
+        return $this->userService->register($this->getBody());
     }
 
-    public function loginAttempt() : string {
-        $data = json_decode(file_get_contents('php://input'), true);
-
-        return $this->userService->authorize($data);;
+    public function loginAttempt() : string|array {
+        return $this->userService->authorize($this->getBody());;
     }
 
-    public function getAccountBalance() : string {
-        return $this->userService->accountBalance(getallheaders());
+    public function getAccountBalance() : array {
+        return $this->userService->accountBalance();
     }
-
 }

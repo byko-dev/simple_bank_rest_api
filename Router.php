@@ -19,7 +19,7 @@ class Router {
             if ($route['method'] === $requestMethod && $this->matchPath($route['path'], $requestPath)) {
 
                 if (is_callable($route['handler'])) {
-                    echo call_user_func($route['handler']);
+                    echo json_encode(call_user_func($route['handler']));
                     return;
                 }
 
@@ -28,7 +28,7 @@ class Router {
         }
 
         http_response_code(404);
-        echo json_encode(array('message' => 'NOT FOUND'));
+        echo json_encode(['message' => 'NOT FOUND']);
     }
 
     private function matchPath(string $routePath, $requestPath) {
