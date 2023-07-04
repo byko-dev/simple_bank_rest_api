@@ -5,6 +5,8 @@ require_once 'Autoloader.php';
 spl_autoload_register(Autoloader::loadClass("database/TransactionTable"));
 spl_autoload_register(Autoloader::loadClass("jwt/JWT"));
 
+
+/* maybe a better way is to use trait instead of abstract class, i dont know */
 class TransactionService extends AbstractService {
 
     private TransactionTable $transactionTable;
